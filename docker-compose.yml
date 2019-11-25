@@ -9,9 +9,9 @@ services:
         GROUP_ID: ${GROUP_ID:-1000}
         PORT: ${PORT:-51000}
     volumes:
+      - ${PWD}/data:/home/jupyter/data:ro
       - ${PWD}/src:/home/jupyter/src
       - ${PWD}/notebooks:/home/jupyter/notebooks
       - ${PWD}/scratch:/home/jupyter/scratch
-      - ${PWD}/data:/home/jupyter/data:ro
     ports:
       - ${PORT:-51000}

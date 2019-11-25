@@ -15,12 +15,13 @@ run: build
 
 .PHONY: build
 build:
-        docker image build \
+	docker image build \
         --build-arg USER_ID=${USER_ID} \
         --build-arg GROUP_ID=${GROUP_ID} \
         --build-arg PORT=${PORT} \
         -t scipi-env:latest-${USER_ID} \
         .
+
 .PHONY: update-env
 update-env:
-        conda env update -f docker/environment.yml
+	conda env update -f docker/environment.yml
