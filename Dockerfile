@@ -25,14 +25,15 @@ RUN apt-get install -y curl grep sed dpkg && \
 ADD ./environment.yml /opt/conda/etc/environment.yml
 RUN /opt/conda/bin/conda env update --file /opt/conda/etc/environment.yml --prune
 
-
 ARG USER_ID=1000
 ARG GROUP_ID=1000
 ARG PORT=8889
 
-RUN groupadd -g $GROUP_ID jupyter &&\
-    useradd -l -u $USER_ID -g jupyter jupyter &&\
-    install -d -m 0755 -o jupyter -g jupyter /home/jupyter
+RUN useradd -l -u $USER_ID -g users jupyter &&\
+    install -d -m 0755 -o jupyter -g users /home/jupyter
+
+ADD ./entrypoint.sh /opt/conda/bin/entrypoint.sh
+RUN chmod +x /opt/conda/bin/entrypoint.sh
 
 USER jupyter
 
@@ -43,7 +44,7 @@ VOLUME /home/jupyter/src
 
 EXPOSE ${PORT}
 
-ENTRYPOINT [ "/usr/bin/tini", "--" ]
+ENTRYPOINT [ "/opt/conda/bin/entrypoint.sh" ]
 ENV PORT=${PORT}
 
 CMD /opt/conda/bin/jupyter notebook --notebook-dir=/home/jupyter/notebooks --ip='0.0.0.0' --port=$PORT --no-browser
