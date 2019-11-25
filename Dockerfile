@@ -47,4 +47,4 @@ EXPOSE ${PORT}
 ENTRYPOINT [ "/opt/conda/bin/entrypoint.sh" ]
 ENV PORT=${PORT}
 
-CMD /opt/conda/bin/jupyter notebook --notebook-dir=/home/jupyter/notebooks --ip='0.0.0.0' --port=$PORT --no-browser
+CMD /opt/conda/bin/jupyter lab --notebook-dir=/home/jupyter --ip='0.0.0.0' --port=$PORT --no-browser

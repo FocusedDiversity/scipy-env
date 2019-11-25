@@ -36,6 +36,10 @@ build:
         -t scipi-env:latest-${USER_ID} \
         .
 
-.PHONY: update-env
-update-env:
-	conda env update -f docker/environment.yml
+.PHONY: create-local
+create-local:
+	conda env create -n synaptiq -f environment.yml
+
+.PHONY: update-local
+update-local:
+	conda env -n synaptiq update -f environment.yml
