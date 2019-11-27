@@ -25,6 +25,14 @@ RUN apt-get install -y curl grep sed dpkg && \
     rm tini.deb && \
     apt-get clean
 
-ADD ./environment.yml /opt/conda/etc/environment-base.yml
-RUN /opt/conda/bin/conda env update -f /opt/conda/etc/environment-base.yml
+#ADD ./environment.yml /opt/conda/etc/environment-base.yml
+#RUN /opt/conda/bin/conda env update -f /opt/conda/etc/environment-base.yml
+RUN /opt/conda/bin/conda install \
+    gensim \
+    keras \
+    numpy \
+    pandas \
+    scipy \
+    tensorflow-gpu 
+
 RUN /opt/conda/bin/conda install -c conda-forge tika pytesseract nbstripout
