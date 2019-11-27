@@ -306,6 +306,7 @@ dependencies:
   - tblib=1.4.0=py_0
   - tensorboard=2.0.0=pyhb230dea_0
   - tensorflow=2.0.0=mkl_py37h66b46cc_0
+  - tensorflow-gpu
   - tensorflow-base=2.0.0=mkl_py37h9204916_0
   - tensorflow-estimator=2.0.0=pyh2649769_0
   - termcolor=1.1.0=py37_1

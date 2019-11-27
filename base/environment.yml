@@ -1,0 +1,12 @@
+name: base
+channels:
+        - defaults
+        - anaconda
+dependencies: 
+        - gensim
+        - keras
+        - numpy
+        - opencv
+        - scikit-learn
+        - tensorflow
+
