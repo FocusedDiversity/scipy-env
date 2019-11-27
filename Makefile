@@ -6,7 +6,7 @@ default: run
 
 .PHONY: run
 run: build
-	docker container run -ti -P \
+	docker container run --gpus=all -ti -P \
         -e PORT=${PORT} \
         -p 127.0.0.1:${PORT}:${PORT} \
         -v ${PWD}/data:/home/jupyter/data:ro \

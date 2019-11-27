@@ -1,14 +1,18 @@
 # Add the package repositories
 distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
 sudo apt-get update && sudo apt-get install -y \
-	curl \
-	vim \
-	docker.io \
 	apt-transport-https \
 	ca-certificates \
 	curl \
+	docker.io \
+	gcc \
 	gnupg-agent \
-	software-properties-common
+	linux-headers-$(uname-r) \
+	python-pip \
+	software-properties-common \
+	vim 
+
+sudo pip install --global nbstripout
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
 sudo add-apt-repository \
