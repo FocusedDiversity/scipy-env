@@ -1,5 +1,5 @@
 VERSION:=v2
-PROJECT=synaptiq/scipy-env-base
+PROJECT=synaptiq/scipy-env-gpu
 PORT:=8889
 
 .PHONY: default
