@@ -1,4 +1,4 @@
-VERSION:=v2
+VERSION:=v3
 PROJECT=synaptiq/scipy-env-base
 PORT:=8889
 
@@ -13,7 +13,8 @@ build:
 
 .PHONY: publish
 publish:
-	docker image push ${PROJECT}:${VERSION} ${PROJECT}:latest
+	docker image push ${PROJECT}:${VERSION}
+	docker image push ${PROJECT}:latest
 
 .PHONY: run
 run: build
