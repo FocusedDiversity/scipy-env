@@ -6,34 +6,35 @@ default: run
 
 .PHONY: run
 run: build
-	docker container run --gpus=all -ti -P \
+	docker container run -ti -P \
         -e PORT=${PORT} \
-        -p 127.0.0.1:${PORT}:${PORT} \
-        -v ${PWD}/data:/home/jupyter/data:ro \
-        -v ${PWD}/src:/home/jupyter/src \
-        -v ${PWD}/notebooks:/home/jupyter/notebooks \
-        -v ${PWD}/scratch:/home/jupyter/scratch \
-        scipi-env:latest-${USER_ID}
+        -p ${PORT}:${PORT} \
+        -v ${PWD}/data:/home/${USER}/data:ro \
+        -v ${PWD}/src:/home/${USER}/src \
+        -v ${PWD}/notebooks:/home/${USER}/notebooks \
+        -v ${PWD}/scratch:/home/${USER}/scratch \
+        scipi-env:latest-${USER} 
 
 .PHONY: test
 test: build
 	docker container run -ti -P \
         -e PORT=${PORT} \
-        -p 127.0.0.1:${PORT}:${PORT} \
-        -v ${PWD}/data:/home/jupyter/data:ro \
-        -v ${PWD}/pytest.ini:/home/jupyter/pytest.ini:ro \
-        -v ${PWD}/src:/home/jupyter/src \
-        -v ${PWD}/notebooks:/home/jupyter/notebooks \
-        -v ${PWD}/scratch:/home/jupyter/scratch \
-        scipi-env:latest-${USER_ID} pytest 
+        -p ${PORT}:${PORT} \
+        -v ${PWD}/data:/home/${USER}/data:ro \
+        -v ${PWD}/pytest.ini:/home/${USER}/pytest.ini:ro \
+        -v ${PWD}/src:/home/${USER}/src \
+        -v ${PWD}/notebooks:/home/${USER}/notebooks \
+        -v ${PWD}/scratch:/home/${USER}/scratch \
+        scipi-env:latest-${USER} pytest 
 
 
 .PHONY: build
 build:
 	docker image build \
+        --build-arg USER_NAME=${USER} \
         --build-arg USER_ID=${USER_ID} \
         --build-arg PORT=${PORT} \
-        -t scipi-env:latest-${USER_ID} \
+        -t scipi-env:latest-${USER} \
         .
 
 .PHONY: create-local
