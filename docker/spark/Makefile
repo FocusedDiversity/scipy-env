@@ -1,5 +1,5 @@
-VERSION:=v3
-PROJECT=synaptiq/scipy-env-gpu
+VERSION:=v1
+PROJECT=synaptiq/scipy-env-spark
 PORT:=8889
 
 .PHONY: default

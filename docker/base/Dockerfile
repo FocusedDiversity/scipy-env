@@ -32,7 +32,7 @@ RUN DEBIAN_FRONTEND=noninteractive && \
     wget --quiet https://d3pxv6yz143wms.cloudfront.net/8.232.09.1/java-1.8.0-amazon-corretto-jdk_8.232.09-1_amd64.deb -O java.deb &&\
     dpkg -i java.deb &&\
     rm java.deb &&\
-    TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
+    TINI_VERSION=`curl -q https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
     wget --quiet https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb -O tini.deb && \
     dpkg -i tini.deb && \
     rm tini.deb && \
@@ -58,9 +58,9 @@ RUN /opt/conda/bin/conda install -c conda-forge tika pytesseract nbstripout
 RUN useradd -l -u $USER_ID -g users jupyter &&\
     install -d -m 0755 -o jupyter -g users /home/jupyter
 
-ADD ./entrypoint.sh /opt/conda/bin/entrypoint.sh
+COPY ./entrypoint.sh /opt/conda/bin/entrypoint.sh
 RUN chmod +x /opt/conda/bin/entrypoint.sh
-EXPOSE ${PORT}
+EXPOSE ${PORT} 
 ENV PORT=${PORT}
 
 ENTRYPOINT [ "gosu", "jupyter", "/opt/conda/bin/entrypoint.sh" ]

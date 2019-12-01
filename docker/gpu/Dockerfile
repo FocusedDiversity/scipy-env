@@ -1,4 +1,4 @@
-FROM synaptiq/scipy-env-base:v2
+FROM synaptiq/scipy-env-base:v3
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
