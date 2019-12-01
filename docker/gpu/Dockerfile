@@ -42,4 +42,6 @@ RUN wget --quiet -O opencv.zip https://github.com/opencv/opencv/archive/4.1.2.zi
             make -j8 &&\
             make install
 
+RUN conda install tensorflow-gpu
+
 USER jupyter
