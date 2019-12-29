@@ -23,6 +23,7 @@ RUN DEBIAN_FRONTEND=noninteractive && \
         libxext6 \
         libsm6 \
         libxrender1 \
+        make \
         sed \
         tesseract-ocr \
         tesseract-ocr-eng \
