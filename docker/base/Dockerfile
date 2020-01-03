@@ -1,4 +1,4 @@
-FROM nvidia/cuda:10.1-base-ubuntu18.04
+FROM ubuntu:18.04
 
 ARG USER_ID=889
 ARG GROUP_ID=889
@@ -6,33 +6,33 @@ ARG PORT=8889
 ARG CONDA_VERSION="2019.10"
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
-
-RUN DEBIAN_FRONTEND=noninteractive && \    
-    ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime &&\
-    apt-get update --fix-missing && \
+ENV DEBIAN_FRONTEND=noninteractive 
+RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime &&\
+    apt-get update && \
     apt-get install -y \
         bzip2  \
-        ca-certificates \
         curl \
+        ca-certificates \
         dpkg \
-        git \
         grep \
         gosu \
-        java-common \
         libglib2.0-0 \
         libxext6 \
         libsm6 \
         libxrender1 \
         make \
+        software-properties-common \
         sed \
         tesseract-ocr \
         tesseract-ocr-eng \
         tzdata  \
         wget &&\
+    curl https://apt.corretto.aws/corretto.key | apt-key add - &&\
+    add-apt-repository 'deb https://apt.corretto.aws stable main' &&\
+    apt-get install -y \
+        java-1.8.0-amazon-corretto-jdk  \
+        java-common &&\
     apt-get clean &&\
-    wget --quiet https://d3pxv6yz143wms.cloudfront.net/8.232.09.1/java-1.8.0-amazon-corretto-jdk_8.232.09-1_amd64.deb -O java.deb &&\
-    dpkg -i java.deb &&\
-    rm java.deb &&\
     TINI_VERSION=`curl -q https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
     wget --quiet https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb -O tini.deb && \
     dpkg -i tini.deb && \
@@ -46,15 +46,21 @@ ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-amazon-corretto
 
 ENV PATH /opt/conda/bin:$PATH
 
-RUN /opt/conda/bin/conda install \
+RUN conda install \
     gensim \
     keras \
     numpy \
     pandas \
     scipy \
-    tensorflow
-
-RUN /opt/conda/bin/conda install -c conda-forge tika pytesseract nbstripout
+    tensorboard \
+    tensorflow \
+    tensorflow-estimator \
+    && conda install -c anaconda \
+        pillow \
+    && conda install -c conda-forge \
+        tika \
+        pytesseract \
+        nbstripout
 
 RUN useradd -l -u $USER_ID -g users jupyter &&\
     install -d -m 0755 -o jupyter -g users /home/jupyter

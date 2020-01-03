@@ -1,4 +1,4 @@
-VERSION:=v4
+VERSION:=v5
 PROJECT=synaptiq/scipy-env-base
 PORT:=8889
 
