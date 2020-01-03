@@ -1,47 +1,75 @@
-FROM synaptiq/scipy-env-base:v3
+FROM nvidia/cuda:10.1-base-ubuntu18.04
+
+ARG USER_ID=889
+ARG GROUP_ID=889
+ARG PORT=8889
+ARG CONDA_VERSION="2019.10"
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
-USER root
+ENV DEBIAN_FRONTEND=noninteractive 
+RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime &&\
+    apt-get update && \
+    apt-get install -y \
+        bzip2  \
+        curl \
+        ca-certificates \
+        dpkg \
+        grep \
+        gosu \
+        libglib2.0-0 \
+        libxext6 \
+        libsm6 \
+        libxrender1 \
+        make \
+        software-properties-common \
+        sed \
+        tesseract-ocr \
+        tesseract-ocr-eng \
+        tzdata  \
+        wget &&\
+    curl https://apt.corretto.aws/corretto.key | apt-key add - &&\
+    add-apt-repository 'deb https://apt.corretto.aws stable main' &&\
+    apt-get install -y \
+        java-1.8.0-amazon-corretto-jdk  \
+        java-common &&\
+    apt-get clean &&\
+    TINI_VERSION=`curl -q https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
+    wget --quiet https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb -O tini.deb && \
+    dpkg -i tini.deb && \
+    rm tini.deb && \
+    wget --quiet https://repo.anaconda.com/archive/Anaconda3-${CONDA_VERSION}-Linux-x86_64.sh -O anaconda.sh && \
+    /bin/bash anaconda.sh -b -p /opt/conda && \
+    rm anaconda.sh && \
+    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
 
-RUN apt-get update --fix-missing && apt-get install -y \
-    git build-essential cmake unzip pkg-config \
-    libjpeg-dev libpng-dev libtiff-dev \
-    libavcodec-dev libavformat-dev libswscale-dev libv4l-dev \
-    libxvidcore-dev libx264-dev \
-    libgtk-3-dev libatlas-base-dev gfortran \
-    python-tk \
-    python3-tk python-imaging-tk 
+ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-amazon-corretto
 
-RUN wget --quiet -O opencv.zip https://github.com/opencv/opencv/archive/4.1.2.zip &&\
-    wget --quiet -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.1.2.zip &&\
-    unzip opencv.zip &&\
-    unzip opencv_contrib.zip &&\
-    rm opencv.zip &&\
-    rm opencv_contrib.zip &&\
-    mv opencv-4.1.2 opencv &&\
-    mv opencv_contrib-4.1.2 opencv_contrib &&\
-    cd opencv &&\
-    mkdir build &&\
-    cd build &&\
-    cmake -D CMAKE_BUILD_TYPE=RELEASE \
-        -D BUILD_opencv_python3=yes \
-        -D CMAKE_INSTALL_PREFIX=/opt/conda \
-        -D INSTALL_PYTHON_EXAMPLES=OFF \
-        -D INSTALL_C_EXAMPLES=OFF \
-        -D OPENCV_ENABLE_NONFREE=OFF \
-        -D WITH_CUDA=ON \
-        -D ENABLE_FAST_MATH=1 \
-        -D CUDA_FAST_MATH=1 -D WITH_CUBLAS=1 \
-        -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
-        -D BUILD_EXAMPLES=OFF \
-        -D BUILD_opencv_cudacodec=OFF \
-        -D ENABLE_PRECOMPILED_HEADERS=ON \
-        -D PYTHON_EXECUTABLE=/opt/conda/bin/python \
-        -D BUILD_EXAMPLES=ON .. &&\
-            make -j8 &&\
-            make install
+ENV PATH /opt/conda/bin:$PATH
 
-RUN conda install tensorflow-gpu
+RUN conda install \
+    gensim \
+    keras \
+    numpy \
+    pandas \
+    scipy \
+    tensorboard \
+    tensorflow-gpu \
+    tensorflow-estimator \
+    && conda install -c anaconda \
+        pillow \
+    && conda install -c conda-forge \
+        tika \
+        pytesseract \
+        nbstripout
 
-USER jupyter
+RUN useradd -l -u $USER_ID -g users jupyter &&\
+    install -d -m 0755 -o jupyter -g users /home/jupyter
+
+COPY ./entrypoint.sh /opt/conda/bin/entrypoint.sh
+RUN chmod +x /opt/conda/bin/entrypoint.sh
+EXPOSE ${PORT} 
+ENV PORT=${PORT}
+
+ENTRYPOINT [ "gosu", "jupyter", "/opt/conda/bin/entrypoint.sh" ]
+CMD /opt/conda/bin/jupyter lab --ip='0.0.0.0' --port=$PORT --no-browse
