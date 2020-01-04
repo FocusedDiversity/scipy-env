@@ -1,0 +1,40 @@
+.PHONY: build run clean test
+.DEFAULT: run
+
+USER_ID:=$(shell id -u ${USER})
+PORT:=5${USER_ID}
+IMAGE_NAME:=docker-gpu-opencv:latest-${USER}
+
+find build:
+	docker image build \
+        --build-arg USER_NAME=${USER} \
+        --build-arg USER_ID=${USER_ID} \
+        --build-arg PORT=${PORT} \
+        -t ${IMAGE_NAME} \
+        .
+
+run: build
+	docker container run --rm --read-only --gpus=all -ti -P \
+        --name jupyterlab-${USER} \
+        -e PORT=${PORT} \
+	-p 127.0.0.1:${PORT}:${PORT} \
+        -v ${PWD}/data:/home/${USER}/data:ro \
+        -v ${PWD}/src:/home/${USER}/src \
+        -v ${PWD}/notebooks:/home/${USER}/notebooks \
+        -v ${PWD}/scratch:/home/${USER}/scratch \
+        ${IMAGE_NAME}
+
+test: build
+	docker container run -ti -P \
+	-e PORT=${PORT} \
+	-p ${PORT}:${PORT} \
+	-v ${PWD}/data:/home/${USER}/data:ro \
+	-v ${PWD}/pytest.ini:/home/${USER}/pytest.ini:ro \
+	-v ${PWD}/src:/home/${USER}/src \
+	-v ${PWD}/notebooks:/home/${USER}/notebooks \
+	-v ${PWD}/scratch:/home/${USER}/scratch \
+	${IMAGE_NAME} pytest 
+
+
+clean:
+	docker container rm jupyterlab-${USER}
