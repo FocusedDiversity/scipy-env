@@ -73,5 +73,9 @@ to ensure all python modules are auto-reloaded when cells are run.
 By default, the Makefile runs tests using pytest. The tests are discovered inside `src/tests` folder
 
 
+## Using with AWS
 
+- Create an instance, either g4dn or p3 using the AWS Deep Learning AMI on Ubuntu 18.04
+- Log in and clonse this repo
+- `docker run`
 
