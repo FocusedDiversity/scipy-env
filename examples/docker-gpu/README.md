@@ -76,7 +76,7 @@ By default, the Makefile runs tests using pytest. The tests are discovered insid
 ## Using with AWS
 
 - Create an instance, either g4dn or p3 using the AWS Deep Learning AMI on Ubuntu 18.04
-- Create an ssh config host entry for convenience in ~/.ssh/config
+- Create a host entry for convenience in ~/.ssh/config
 
 ```
 Host dev1
