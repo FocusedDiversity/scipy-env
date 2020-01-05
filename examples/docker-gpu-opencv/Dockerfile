@@ -29,6 +29,7 @@ RUN useradd -l -u $USER_ID -s /bin/bash -g users ${USER_NAME} &&\
     install -d -m 0755 -o ${USER_NAME} -g users /home/${USER_NAME}/scratch &&\
     install -d -m 0755 -o ${USER_NAME} -g users /home/${USER_NAME}/src
     
+VOLUME /tmp
 VOLUME /home/${USER_NAME}
 VOLUME /home/${USER_NAME}/data
 VOLUME /home/${USER_NAME}/notebooks
