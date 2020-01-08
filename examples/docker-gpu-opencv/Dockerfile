@@ -1,4 +1,4 @@
-FROM synaptiq/scipy-env-gpu-opencv:v5
+FROM synaptiq/scipy-env-gpu-opencv:v6
 
 ARG USER_NAME=user
 ARG USER_ID=1000

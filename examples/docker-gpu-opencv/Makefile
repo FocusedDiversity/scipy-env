@@ -3,7 +3,10 @@
 
 USER_ID:=$(shell id -u ${USER})
 PORT:=5${USER_ID}
-IMAGE_NAME:=docker-gpu-opencv:latest-${USER}
+BASE_NAME:=docker-gpu-opencv-contrib
+IMAGE_NAME:=${BASE_NAME}:latest-${USER}
+CONTAINER_NAME:=${BASE_NAME}-${USER}
+
 
 find build:
 	docker image build \
@@ -15,7 +18,7 @@ find build:
 
 run: build
 	docker container run --rm --read-only --gpus=all -ti -P \
-        --name jupyterlab-${USER} \
+        --name ${CONTAINER_NAME} \
         -e PORT=${PORT} \
 	-p 127.0.0.1:${PORT}:${PORT} \
         -v ${PWD}/data:/home/${USER}/data:ro \
@@ -37,4 +40,4 @@ test: build
 
 
 clean:
-	docker container rm jupyterlab-${USER}
+	docker container rm ${CONTAINER_NAME}
