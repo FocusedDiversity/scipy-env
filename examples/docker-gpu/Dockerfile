@@ -1,4 +1,4 @@
-FROM synaptiq/scipy-env-gpu:v6
+FROM synaptiq/scipy-env-gpu:v7
 
 ARG USER_NAME=user
 ARG USER_ID=1000

@@ -18,7 +18,7 @@ run: build
 	docker container run --rm --read-only --gpus=all -ti -P \
         --name ${CONTAINER_NAME} \
         -e PORT=${PORT} \
-	-p 127.0.0.1:${PORT}:${PORT} \
+	-p 0.0.0.0:${PORT}:${PORT} \
         -v ${PWD}/data:/home/${USER}/data:ro \
         -v ${PWD}/src:/home/${USER}/src \
         -v ${PWD}/notebooks:/home/${USER}/notebooks \
