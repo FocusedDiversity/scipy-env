@@ -1,15 +1,9 @@
-FROM synaptiq/scipy-env-gpu:v7
+FROM synaptiq/scipy-env-gpu-opencv-contrib:v1
 
 ARG USER_NAME=user
 ARG USER_ID=1000
 ARG GROUP_ID=1000
 ARG PORT=8889
-
-RUN apt-get install -y \
-    build-essential ccache cmake unzip pkg-config checkinstall yasm \
-    cuda-toolkit-10-1 \
-    libcudnn7=7.6.5.32-1+cuda10.1 \
-    libcudnn7-dev=7.6.5.32-1+cuda10.1 
 
 RUN pip install 'https://github.com/cocodataset/cocoapi/archive/master.tar.gz#subdirectory=PythonAPI'
 
@@ -36,8 +30,13 @@ VOLUME /home/${USER_NAME}/notebooks
 VOLUME /home/${USER_NAME}/scratch
 VOLUME /home/${USER_NAME}/src
 
-EXPOSE ${PORT}
+EXPOSE ${PORT} 
 ENV PORT=${PORT}
+
+ARG PORT2=6007
+EXPOSE ${PORT2
+ENV PORT2=${PORT2}
+
 ENV SHELL=/bin/bash
 
 USER ${USER_NAME}
