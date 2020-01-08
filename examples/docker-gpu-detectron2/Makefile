@@ -7,6 +7,7 @@ PORT2:=6${USER_ID}
 BASE_NAME=docker-gpu-detecton2
 IMAGE_NAME:=${BASE_NAME}:latest-${USER}
 CONTAINER_NAME:=${BASE_NAME}-${USER}
+LISTEN_HOST=127.0.0.1
 
 find build:
 	docker image build \
@@ -23,8 +24,8 @@ run: build
 	--shm-size=1g \
         -e PORT=${PORT} \
         -e PORT2=${PORT2} \
-	-p 127.0.0.1:${PORT}:${PORT} \
-	-p 127.0.0.1:${PORT2}:${PORT2} \
+	-p ${LISTEN_HOST}:${PORT}:${PORT} \
+	-p ${LISTEN_HOST}:${PORT2}:${PORT2} \
         -v ${PWD}/data:/home/${USER}/data:ro \
         -v ${PWD}/src:/home/${USER}/src \
         -v ${PWD}/notebooks:/home/${USER}/notebooks \
