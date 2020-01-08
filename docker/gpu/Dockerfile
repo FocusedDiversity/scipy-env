@@ -1,4 +1,4 @@
-FROM nvidia/cuda:10.0-base-ubuntu18.04
+FROM nvidia/cuda:10.1-cudnn7-runtime-ubuntu18.04
 
 ARG USER_ID=889
 ARG GROUP_ID=889
@@ -13,23 +13,20 @@ RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime &&\
     apt-get install -y \
         bzip2  \
         curl \
-        ca-certificates \
-        dpkg \
-        grep \
         gosu \
         libglib2.0-0 \
         libxext6 \
         libsm6 \
         libxrender1 \
         make \
-        software-properties-common \
         sed \
         tesseract-ocr \
         tesseract-ocr-eng \
         tzdata  \
         wget &&\
     curl https://apt.corretto.aws/corretto.key | apt-key add - &&\
-    add-apt-repository 'deb https://apt.corretto.aws stable main' &&\
+    echo 'deb https://apt.corretto.aws stable main' > /etc/apt/sources.list.d/corretto.list &&\
+    apt-get update && \
     apt-get install -y \
         java-1.8.0-amazon-corretto-jdk  \
         java-common &&\
@@ -47,18 +44,27 @@ ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-amazon-corretto
 
 ENV PATH /opt/conda/bin:$PATH
 
-RUN conda install \
-    gensim \
-    keras \
-    numpy \
-    pandas \
-    scipy \
-    tensorboard \
-    tensorflow-gpu \
-    tensorflow-estimator \
-    && conda install -c anaconda \
+RUN echo "Install packages from the base pkgs channel" && \
+    conda install \
+        cudatoolkit=10.1 \
+        cudnn=7.6.5 \
+        gensim \
+        keras \
+        numpy \
+        pandas \
         pillow \
-    && conda install -c conda-forge \
+        scipy \
+        tensorboard \
+        tensorflow-gpu \
+        tensorflow-estimator \
+    && echo "\nInstalling packages from the pytorch channel" \
+    && conda install -y -c pytorch \
+        cudatoolkit=10.1 \
+        cudnn=7.6.5 \
+        pytorch-gpu  \
+        torchvision  \
+    && echo "\nInstalling packages from the conda-forge channel" \
+    && conda install -y -c conda-forge \
         tika \
         pytesseract \
         nbstripout

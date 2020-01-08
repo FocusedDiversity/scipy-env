@@ -1,4 +1,4 @@
-VERSION:=v6
+VERSION:=v7
 PROJECT=synaptiq/scipy-env-gpu
 PORT:=8889
 

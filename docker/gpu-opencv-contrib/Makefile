@@ -1,5 +1,5 @@
-VERSION:=v5
-PROJECT=synaptiq/scipy-env-gpu-opencv
+VERSION:=v1
+PROJECT=synaptiq/scipy-env-gpu-opencv-contrib
 PORT:=8889
 
 .PHONY: default

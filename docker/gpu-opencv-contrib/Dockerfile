@@ -3,8 +3,8 @@ FROM synaptiq/scipy-env-gpu:v6
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update --fix-missing && apt-get install -y \
     cuda-toolkit-10-0 \
-    libcudnn7=7.6.5.32-1+cuda10.0 \
-    libcudnn7-dev=7.6.5.32-1+cuda10.0 \
+    libcudnn7=7.6.3.30-1+cuda10.0 \
+    libcudnn7-dev=7.6.3.30-1+cuda10.0 \
     build-essential ccache cmake unzip pkg-config checkinstall yasm \
     libjpeg-dev libpng-dev libtiff-dev \
     libavcodec-dev libavformat-dev libswscale-dev libv4l-dev \
@@ -28,6 +28,10 @@ RUN apt-get update --fix-missing && apt-get install -y \
     gfortran \
     ant \
     libprotobuf-dev protobuf-compiler
+
+RUN conda install -y -c pytorch \
+    pytorch-gpu  \
+    cudatoolkit=10.0
 
 ARG OPENCV_VERSION=4.2.0
 RUN curl -sL https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.tar.gz | tar -xz &&\
@@ -68,3 +72,4 @@ RUN curl -sL https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.tar.gz |
         make install &&\
         cd .. &&\
         rm -rf build opencv-${OPENCV_VERSION} opencv_contrib-${OPENCV_VERSION}
+
