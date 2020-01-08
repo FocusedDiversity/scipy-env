@@ -13,6 +13,7 @@ find build:
         --build-arg USER_NAME=${USER} \
         --build-arg USER_ID=${USER_ID} \
         --build-arg PORT=${PORT} \
+        --build-arg PORT2=${PORT2} \
         -t ${IMAGE_NAME} \
         .
 
