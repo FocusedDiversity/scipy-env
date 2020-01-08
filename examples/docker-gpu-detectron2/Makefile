@@ -3,8 +3,9 @@
 
 USER_ID:=$(shell id -u ${USER})
 PORT:=5${USER_ID}
-IMAGE_NAME:=docker-gpu:latest-${USER}
-CONTAINER_NAME:=docker-gpu-${USER}
+BASE_NAME=docker-gpu-detecton2
+IMAGE_NAME:=${BASE_NAME}:latest-${USER}
+CONTAINER_NAME:=${BASE_NAME}-${USER}
 
 find build:
 	docker image build \
@@ -18,7 +19,7 @@ run: build
 	docker container run --rm --read-only --gpus=all -ti -P \
         --name ${CONTAINER_NAME} \
         -e PORT=${PORT} \
-	-p 127.0.0.1:${PORT}:${PORT} \
+	-p 0.0.0.0:${PORT}:${PORT} \
         -v ${PWD}/data:/home/${USER}/data:ro \
         -v ${PWD}/src:/home/${USER}/src \
         -v ${PWD}/notebooks:/home/${USER}/notebooks \

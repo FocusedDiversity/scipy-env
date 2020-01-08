@@ -5,13 +5,19 @@ ARG USER_ID=1000
 ARG GROUP_ID=1000
 ARG PORT=8889
 
-RUN pip install 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'
+RUN apt-get install -y \
+    build-essential ccache cmake unzip pkg-config checkinstall yasm \
+    cuda-toolkit-10-1 \
+    libcudnn7=7.6.5.32-1+cuda10.1 \
+    libcudnn7-dev=7.6.5.32-1+cuda10.1 
 
-RUN pip install 'git+https://github.com/facebookresearch/fvcore'
+RUN pip install 'https://github.com/cocodataset/cocoapi/archive/master.tar.gz#subdirectory=PythonAPI'
+
+RUN pip install 'https://github.com/facebookresearch/fvcore/archive/master.tar.gz'
 # install detectron2
 ENV FORCE_CUDA="1"
 ENV TORCH_CUDA_ARCH_LIST="Kepler;Kepler+Tesla;Maxwell;Maxwell+Tegra;Pascal;Volta;Turing"
-RUN pip install 'git+https://github.com/facebookresearch/detectron2'
+RUN pip install 'https://github.com/facebookresearch/detectron2/archive/master.tar.gz'
 
 # Set a fixed model cache directory.
 ENV FVCORE_CACHE="/tmp"
