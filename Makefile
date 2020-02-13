@@ -1,12 +1,17 @@
 USER_ID:=$(shell id -u ${USER})
 PORT:=5${USER_ID}
 
+gpuflag=--gpus=all
+ifeq ($(DISABLE_GPU), true)
+gpuflag=
+endif
+
 .PHONY: default
 default: run
 
 .PHONY: run
 run: build
-	docker container run -ti -P \
+	docker container run $(gpuflag) -ti -P \
         -e PORT=${PORT} \
         -p ${PORT}:${PORT} \
         -v ${PWD}/data:/home/${USER}/data:ro \
@@ -17,7 +22,7 @@ run: build
 
 .PHONY: test
 test: build
-	docker container run -ti -P \
+	docker container run $(gpuflag) -ti -P \
         -e PORT=${PORT} \
         -p ${PORT}:${PORT} \
         -v ${PWD}/data:/home/${USER}/data:ro \
