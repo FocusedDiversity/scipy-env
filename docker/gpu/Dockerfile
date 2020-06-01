@@ -1,9 +1,9 @@
-FROM nvidia/cuda:10.1-cudnn7-runtime-ubuntu18.04
+FROM nvidia/cuda:10.2-cudnn7-runtime-ubuntu18.04
 
 ARG USER_ID=889
 ARG GROUP_ID=889
 ARG PORT=8889
-ARG CONDA_VERSION="2019.10"
+ARG CONDA_VERSION="2020.02"
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
