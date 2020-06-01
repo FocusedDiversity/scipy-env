@@ -8,7 +8,7 @@ IMAGE_NAME:=${BASE_NAME}:latest-${USER}
 CONTAINER_NAME:=${BASE_NAME}-${USER}
 
 
-find build:
+build:
 	docker image build \
         --build-arg USER_NAME=${USER} \
         --build-arg USER_ID=${USER_ID} \
