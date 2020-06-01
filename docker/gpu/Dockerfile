@@ -46,9 +46,7 @@ ENV PATH /opt/conda/bin:$PATH
 
 RUN echo "Install packages from the base pkgs channel" && \
     conda install \
-        cudatoolkit=10.1 \
-        cudnn=7.6.5 \
-        gensim \
+        cudatoolkit=10.2 \
         keras \
         numpy \
         pandas \
@@ -59,8 +57,8 @@ RUN echo "Install packages from the base pkgs channel" && \
         tensorflow-estimator \
     && echo "\nInstalling packages from the pytorch channel" \
     && conda install -y -c pytorch \
-        cudatoolkit=10.1 \
-        cudnn=7.6.5 \
+        cudatoolkit=10.2 \
+        cudnn \
         pytorch-gpu  \
         torchvision  \
     && echo "\nInstalling packages from the conda-forge channel" \
