@@ -11,7 +11,7 @@ RUN pip install 'https://github.com/facebookresearch/fvcore/archive/master.tar.g
 # install detectron2
 ENV FORCE_CUDA="1"
 ENV TORCH_CUDA_ARCH_LIST="Kepler;Kepler+Tesla;Maxwell;Maxwell+Tegra;Pascal;Volta;Turing"
-RUN pip install 'https://github.com/facebookresearch/detectron2/archive/master.tar.gz'
+RUN pip install 'https://github.com/facebookresearch/detectron2/archive/v0.1.tar.gz'
 
 # Set a fixed model cache directory.
 ENV FVCORE_CACHE="/tmp"

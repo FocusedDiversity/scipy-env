@@ -9,7 +9,7 @@ IMAGE_NAME:=${BASE_NAME}:latest-${USER}
 CONTAINER_NAME:=${BASE_NAME}-${USER}
 LISTEN_HOST=127.0.0.1
 
-find build:
+build:
 	docker image build \
         --build-arg USER_NAME=${USER} \
         --build-arg USER_ID=${USER_ID} \
